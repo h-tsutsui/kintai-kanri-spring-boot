@@ -1,0 +1,32 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: '1.5.10.RELEASE'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+archivesBaseName = 'kintai-kanri'
+version = '0.0.1'
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+bootRepackage {
+    excludeDevtools = true
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'org.springframework.boot:spring-boot-devtools'
+}
