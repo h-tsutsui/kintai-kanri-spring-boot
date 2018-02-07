@@ -1,9 +1,13 @@
 buildscript {
+    ext {
+        springBootVersion = '1.5.10.RELEASE'
+        tomcatVersion = '8.5.24'
+    }
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: '1.5.10.RELEASE'
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
 
@@ -12,6 +16,7 @@ repositories {
 }
 
 apply plugin: 'java'
+apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
 archivesBaseName = 'kintai-kanri'
@@ -29,4 +34,6 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.boot:spring-boot-devtools'
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
 }
