@@ -8,6 +8,7 @@ import com.naosim.dddwork.kintaikanri.domain.workdateandtime.WorkTimeStart;
 import jp.co.biglobe.lib.publication.form.FormToValueObject;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 
@@ -18,12 +19,15 @@ import java.time.LocalDateTime;
 public class WorkTimeInputForm implements FormToValueObject<WorkDateAndTime> {
 
     @Getter
+    @NotBlank
     private final String date;
 
     @Getter
+    @NotBlank
     private final String start;
 
     @Getter
+    @NotBlank
     private final String end;
 
     @Getter

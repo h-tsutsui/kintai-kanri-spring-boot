@@ -50,6 +50,9 @@ public class WorkTimeTotalRepositoryFile implements WorkTimeTotalRepository {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
