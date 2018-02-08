@@ -4,11 +4,13 @@ package com.naosim.dddwork.kintaikanri.datasource;
 import com.naosim.dddwork.kintaikanri.domain.workdateandtime.WorkDateAndTime;
 import com.naosim.dddwork.kintaikanri.domain.workdateandtime.WorkTimeInputRepository;
 import com.naosim.dddwork.kintaikanri.domain.workdateandtime.WorkTimeMinutes;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+@Component("com.naosim.dddwork.kintaikanri.datasource.WorkTimeInputRepositoryFile")
 public class WorkTimeInputRepositoryFile implements WorkTimeInputRepository {
     @Override
     public void registerWork_time(WorkDateAndTime workDateAndTime, WorkTimeMinutes workTimeMinutes) {
