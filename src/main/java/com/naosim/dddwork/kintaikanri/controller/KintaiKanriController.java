@@ -15,16 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class KintaiKanriController {
 
-    private Logger logger = Logger.getLogger(KintaiKanriController.class);
-
     @Autowired
     WorkTimeService workTimeService;
-
-    @RequestMapping("/kintai/sample")
-    public String sample() {
-
-        return "これは勤怠のサンプルです。";
-    }
+    private Logger logger = Logger.getLogger(KintaiKanriController.class);
 
     @RequestMapping(value = "/api/kintai/input", method = RequestMethod.POST)
     public String input(@RequestBody WorkTimeInputForm workTimeInputForm) {
