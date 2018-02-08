@@ -2,6 +2,9 @@ buildscript {
     ext {
         springBootVersion = '1.5.10.RELEASE'
         tomcatVersion = '8.5.24'
+        lombokVersion = '1.14.8'
+        isplibraryVersion = '1.8.2'
+        charsetVersion = '2.0'
     }
     repositories {
         mavenCentral()
@@ -13,13 +16,24 @@ buildscript {
 
 repositories {
     mavenCentral()
+    // プライベートレポジトリ
+    maven {
+        url 'http://54.65.64.46/'
+    }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
-archivesBaseName = 'kintai-kanri'
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("$buildDir/classes/main/")
+    }
+}
+
+archivesBaseName = 'kintai-kanri-spring-boot'
 version = '0.0.1'
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -34,6 +48,11 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.boot:spring-boot-devtools'
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    // ISP領域向けJava共通ライブラリ
+    compile "jp.co.biglobe:isplibrary:${isplibraryVersion}"
 
+    // EUCからUTF-8への変換ライブラリ
+    runtime "jp.co.biglobe:charset:${charsetVersion}"
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
