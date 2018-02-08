@@ -1,8 +1,6 @@
 package com.naosim.dddwork.kintaikanri.service;
 
 
-import com.naosim.dddwork.kintaikanri.datasource.WorkTimeInputRepositoryFile;
-import com.naosim.dddwork.kintaikanri.datasource.WorkTimeTotalRepositoryFile;
 import com.naosim.dddwork.kintaikanri.domain.workdateandtime.WorkDateAndTime;
 import com.naosim.dddwork.kintaikanri.domain.workdateandtime.WorkTimeInputRepository;
 import com.naosim.dddwork.kintaikanri.domain.workdateandtime.WorkTimeMinutes;
@@ -11,18 +9,15 @@ import com.naosim.dddwork.kintaikanri.domain.worktotal.WorkDateAndTimeTotal;
 import com.naosim.dddwork.kintaikanri.domain.worktotal.WorkTimeTotal;
 import com.naosim.dddwork.kintaikanri.domain.worktotal.WorkTimeTotalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
 public class WorkTimeService {
 
-    @Qualifier("com.naosim.dddwork.kintaikanri.datasource.WorkTimeInputRepositoryFile")
+
     @Autowired
     private WorkTimeInputRepository workTimeInputRepository;
 
-    @Qualifier("com.naosim.dddwork.kintaikanri.datasource.WorkTimeTotalRepositoryFile")
     @Autowired
     private WorkTimeTotalRepository workTimeTotalRepository;
 

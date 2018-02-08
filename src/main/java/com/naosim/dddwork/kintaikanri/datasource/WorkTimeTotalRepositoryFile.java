@@ -14,7 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-@Component("com.naosim.dddwork.kintaikanri.datasource.WorkTimeTotalRepositoryFile")
+@Component
 public class WorkTimeTotalRepositoryFile implements WorkTimeTotalRepository {
     @Override
     public WorkTimeTotal doWorktimeTaskExecute(WorkDateAndTimeTotal workDateAndTimeTotal) {

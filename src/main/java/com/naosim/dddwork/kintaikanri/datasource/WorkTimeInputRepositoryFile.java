@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-@Component("com.naosim.dddwork.kintaikanri.datasource.WorkTimeInputRepositoryFile")
+@Component
 public class WorkTimeInputRepositoryFile implements WorkTimeInputRepository {
     @Override
     public void registerWork_time(WorkDateAndTime workDateAndTime, WorkTimeMinutes workTimeMinutes) {
