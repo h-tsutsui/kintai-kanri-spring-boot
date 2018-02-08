@@ -1,0 +1,12 @@
+target/
+logs/
+/.project
+/bin/
+/build/
+/out/
+/.settings/
+/.idea/
+/.gradle/
+*.class
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
