@@ -51,6 +51,7 @@ class KintaiKanriControllerSpec extends Specification {
 
         then:
         result.andExpect(status().isOk())
+        println(">>>> " )
 
     }
 
