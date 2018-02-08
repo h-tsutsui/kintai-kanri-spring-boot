@@ -5,6 +5,8 @@ buildscript {
         lombokVersion = '1.14.8'
         isplibraryVersion = '1.8.2'
         charsetVersion = '2.0'
+
+        spockVersion = '1.1-groovy-2.4'
     }
     repositories {
         mavenCentral()
@@ -23,6 +25,7 @@ repositories {
 }
 
 apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
@@ -30,6 +33,15 @@ idea {
     module {
         inheritOutputDirs = false
         outputDir = file("$buildDir/classes/main/")
+    }
+}
+
+sourceSets {
+    test {
+        groovy {
+            // compileTestGroovyで既存のJavaTestソースが対象になるように、既存のJavaTestソースディレクトリを指定する。
+            srcDirs = ['src/test/java']
+        }
     }
 }
 
@@ -49,10 +61,14 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.boot:spring-boot-devtools'
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
+
     // ISP領域向けJava共通ライブラリ
     compile "jp.co.biglobe:isplibrary:${isplibraryVersion}"
 
     // EUCからUTF-8への変換ライブラリ
     runtime "jp.co.biglobe:charset:${charsetVersion}"
+
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    // TestSuites 関連
+    testCompile "org.spockframework:spock-core:${spockVersion}"
 }
