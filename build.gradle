@@ -28,6 +28,7 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
 
 idea {
     module {
@@ -72,4 +73,6 @@ dependencies {
     // TestSuites 関連
     testCompile "org.spockframework:spock-core:${spockVersion}"
     testCompile "org.spockframework:spock-spring:1.1-groovy-2.4"
+
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }
