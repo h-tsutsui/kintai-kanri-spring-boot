@@ -19,19 +19,21 @@ public class KintaiKanriController {
     WorkTimeService workTimeService;
     private Logger logger = Logger.getLogger(KintaiKanriController.class);
 
-    @RequestMapping(value = "/api/kintai/input", method = RequestMethod.POST)
+    @RequestMapping(value = "/input", method = RequestMethod.POST)
     public String input(@RequestBody WorkTimeInputForm workTimeInputForm) {
         //起動コマンド
         //curl -X POST -H 'Content-Type:application/json' -d '{"date":"20180207","start":"0900","end":"2030"}' http://localhost:8080/api/kintai/input --noproxy localhost
+        logger.debug(">>>>>>>>> input >>>>>>>>>> ");
 
         workTimeService.workTimeInput(workTimeInputForm.getValueObject());
         return "INPUT END";
     }
 
-    @RequestMapping(value = "/api/kintai/total", method = RequestMethod.POST)
+    @RequestMapping(value = "/total", method = RequestMethod.POST)
     public TotalWorkTimeYearAndMonth total(@RequestBody WorkTimeTotalForm workTimeTotalForm) {
         //起動コマンド
         //curl -X POST -H 'Content-Type:application/json' -d '{"yearMonth":"201802"}' http://localhost:8080/api/kintai/total --noproxy localhost
+        logger.debug(">>>>>>>>> total >>>>>>>>>> ");
 
         TotalWorkTimeYearAndMonth totalWorkTimeYearAndMonth = workTimeService.workTimeTotal(workTimeTotalForm.getValueObject());
 
