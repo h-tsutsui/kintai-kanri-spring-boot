@@ -39,4 +39,15 @@ public class KintaiKanriController {
 
         return totalWorkTimeYearAndMonth;
     }
+
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    public TotalWorkTimeYearAndMonth test(@RequestBody WorkTimeTotalForm workTimeTotalForm) {
+        //起動コマンド
+        //curl -X POST -H 'Content-Type:application/json' -d '{"yearMonth":"201802"}' http://localhost:8080/api/kintai/test --noproxy localhost
+        logger.debug(">>>>>>>>> test >>>>>>>>>> ");
+
+        TotalWorkTimeYearAndMonth totalWorkTimeYearAndMonth = workTimeService.workTimeTotal(workTimeTotalForm.getValueObject());
+
+        return totalWorkTimeYearAndMonth;
+    }
 }
