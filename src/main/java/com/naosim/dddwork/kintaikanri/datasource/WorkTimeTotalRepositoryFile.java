@@ -7,6 +7,7 @@ import com.naosim.dddwork.kintaikanri.domain.worktotal.WorkMinutesPerYMD;
 import com.naosim.dddwork.kintaikanri.domain.worktotal.WorkTimeTotal;
 import com.naosim.dddwork.kintaikanri.domain.worktotal.WorkTimeTotalRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,8 +18,11 @@ import java.io.IOException;
 @Component
 public class WorkTimeTotalRepositoryFile implements WorkTimeTotalRepository {
     @Override
-    public WorkTimeTotal doWorktimeTaskExecute(WorkDateAndTimeTotal workDateAndTimeTotal) {
-        File file = new File("data.csv");
+    public WorkTimeTotal doWorktimeTaskExecute(WorkDateAndTimeTotal workDateAndTimeTotal, String fileName) {
+        if (StringUtils.isEmpty(fileName)) {
+            fileName = "data.csv";
+        }
+        File file = new File(fileName);
 
         try (
                 FileReader fr = new FileReader(file);

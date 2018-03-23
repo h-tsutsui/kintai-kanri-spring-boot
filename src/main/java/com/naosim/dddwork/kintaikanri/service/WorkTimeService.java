@@ -8,10 +8,14 @@ import com.naosim.dddwork.kintaikanri.domain.worktotal.TotalWorkTimeYearAndMonth
 import com.naosim.dddwork.kintaikanri.domain.worktotal.WorkDateAndTimeTotal;
 import com.naosim.dddwork.kintaikanri.domain.worktotal.WorkTimeTotal;
 import com.naosim.dddwork.kintaikanri.domain.worktotal.WorkTimeTotalRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+
 @Service
+@Slf4j
 public class WorkTimeService {
 
 
@@ -39,9 +43,41 @@ public class WorkTimeService {
      * @return
      */
     public TotalWorkTimeYearAndMonth workTimeTotal(WorkDateAndTimeTotal workDateAndTimeTotal) {
-        WorkTimeTotal workTimeTotal = workTimeTotalRepository.doWorktimeTaskExecute(workDateAndTimeTotal);
+
+        log.debug(">>>>> workTimeTotal start >>>>>>");
+        WorkTimeTotal workTimeTotal = workTimeTotalRepository.doWorktimeTaskExecute(workDateAndTimeTotal, null);
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        TotalWorkTimeYearAndMonth totalWorkTimeYearAndMonth = new TotalWorkTimeYearAndMonth(workTimeTotal.getTotalNormalWorkMinutes(), workTimeTotal.getTotalOverWorkMinutes());
+
+        log.debug(">>>>> workTimeTotal end >>>>>>");
+
+        return totalWorkTimeYearAndMonth;
+    }
+
+    /**
+     * 勤怠合計時間表示(検証用)
+     *
+     * @param workDateAndTimeTotal
+     * @return
+     */
+    public TotalWorkTimeYearAndMonth workTimeTotal2(WorkDateAndTimeTotal workDateAndTimeTotal) {
+
+        log.debug(">>>>> workTimeTotal2 start >>>>>>");
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        WorkTimeTotal workTimeTotal = workTimeTotalRepository.doWorktimeTaskExecute(workDateAndTimeTotal, "data2.csv");
 
         TotalWorkTimeYearAndMonth totalWorkTimeYearAndMonth = new TotalWorkTimeYearAndMonth(workTimeTotal.getTotalNormalWorkMinutes(), workTimeTotal.getTotalOverWorkMinutes());
+
+        log.debug(">>>>> workTimeTotal2 end >>>>>>");
 
         return totalWorkTimeYearAndMonth;
     }
