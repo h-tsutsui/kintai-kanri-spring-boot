@@ -49,7 +49,8 @@ public class WorkTimeService {
         try {
             TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error(">>>> " + e);
+            return null;
         }
         TotalWorkTimeYearAndMonth totalWorkTimeYearAndMonth = new TotalWorkTimeYearAndMonth(workTimeTotal.getTotalNormalWorkMinutes(), workTimeTotal.getTotalOverWorkMinutes());
 
@@ -64,13 +65,14 @@ public class WorkTimeService {
      * @param workDateAndTimeTotal
      * @return
      */
-    public TotalWorkTimeYearAndMonth workTimeTotal2(WorkDateAndTimeTotal workDateAndTimeTotal) {
+    public Integer workTimeTotal2(WorkDateAndTimeTotal workDateAndTimeTotal) {
 
         log.debug(">>>>> workTimeTotal2 start >>>>>>");
         try {
-            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(15);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error(">>>> " + e);
+            return 0;
         }
 
         WorkTimeTotal workTimeTotal = workTimeTotalRepository.doWorktimeTaskExecute(workDateAndTimeTotal, "data2.csv");
@@ -79,6 +81,6 @@ public class WorkTimeService {
 
         log.debug(">>>>> workTimeTotal2 end >>>>>>");
 
-        return totalWorkTimeYearAndMonth;
+        return 500;
     }
 }

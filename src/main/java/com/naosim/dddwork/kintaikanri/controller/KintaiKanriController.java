@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 @RestController
@@ -57,32 +58,49 @@ public class KintaiKanriController {
 
         ExecutorService executorService = Executors.newCachedThreadPool();
 
-        List<CompletableFuture<TotalWorkTimeYearAndMonth>> completableFutureList = Arrays.asList(
-                CompletableFuture.supplyAsync(() -> workTimeService.workTimeTotal(workTimeTotalForm.getValueObject()), executorService),
-                CompletableFuture.supplyAsync(() -> workTimeService.workTimeTotal2(workTimeTotalForm.getValueObject()), executorService)
+        List<CompletableFuture<Object>> completableFutureList = Arrays.asList(
+                CompletableFuture.supplyAsync(() -> workTimeService.workTimeTotal(workTimeTotalForm.getValueObject()),
+                        executorService),
+                CompletableFuture.supplyAsync(() -> workTimeService.workTimeTotal2(workTimeTotalForm.getValueObject()),
+                        executorService)
         );
 
-        CompletableFuture.allOf(
-                completableFutureList.toArray(new CompletableFuture[completableFutureList.size()])
-        ).join();
+        try {
+            CompletableFuture.allOf(
+                    completableFutureList.toArray(new CompletableFuture[completableFutureList.size()])
+            ).get(10, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+            executorService.shutdownNow();
+        }
 
-        completableFutureList.forEach(
-                s -> {
-                    try {
-                        log.debug(" >>> " + s.get().getTotalNormalWorkTimeYearAndMonth().getValue());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
+//        completableFutureList.forEach(
+//                s -> {
+//                    try {
+//                        log.debug(" >>> " + s.get().getTotalNormalWorkTimeYearAndMonth().getValue());
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    } catch (ExecutionException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//        );
 
         //とりあえず、合計してみる。
         Integer sum = completableFutureList.stream()
                 .mapToInt(s -> {
                     try {
-                        return s.get().getTotalNormalWorkTimeYearAndMonth().getValue();
+                        if (s.get().getClass().getSimpleName().equals("TotalWorkTimeYearAndMonth")) {
+                            TotalWorkTimeYearAndMonth totalWorkTimeYearAndMonth = (TotalWorkTimeYearAndMonth) s.get();
+                            return totalWorkTimeYearAndMonth.getTotalNormalWorkTimeYearAndMonth().getValue();
+                        } else {
+                            return (Integer) s.get();
+                        }
+
                     } catch (InterruptedException e) {
                         log.error("Error : " + e);
                         return 0;
@@ -104,33 +122,33 @@ public class KintaiKanriController {
 
     }
 
-    @RequestMapping(value = "/test2", method = RequestMethod.POST)
-    public TotalWorkTimeYearAndMonth test2(@RequestBody WorkTimeTotalForm workTimeTotalForm) {
-        //起動コマンド
-        //curl -X POST -H 'Content-Type:application/json' -d '{"yearMonth":"201802"}' http://localhost:8080/api/kintai/test --noproxy localhost
-        long start = System.currentTimeMillis();
-        log.debug(">>>>>>>>> test2 >>>>>>>>>> ");
-
-        TotalWorkTimeYearAndMonth totalWorkTimeYearAndMonth =
-                workTimeService.workTimeTotal(workTimeTotalForm.getValueObject());
-
-        TotalWorkTimeYearAndMonth totalWorkTimeYearAndMonth2 =
-                workTimeService.workTimeTotal2(workTimeTotalForm.getValueObject());
-
-        long end = System.currentTimeMillis();
-        List<TotalWorkTimeYearAndMonth> totalWorkTimeYearAndMonthList = new ArrayList<TotalWorkTimeYearAndMonth>();
-        totalWorkTimeYearAndMonthList.add(totalWorkTimeYearAndMonth);
-        totalWorkTimeYearAndMonthList.add(totalWorkTimeYearAndMonth2);
-        Integer sum = totalWorkTimeYearAndMonthList.stream().mapToInt(
-                s -> s.getTotalNormalWorkTimeYearAndMonth().getValue()
-        ).sum();
-
-        log.debug("sum : " + sum + " time : " + (end - start) + "ms");
-
-
+//    @RequestMapping(value = "/test2", method = RequestMethod.POST)
+//    public TotalWorkTimeYearAndMonth test2(@RequestBody WorkTimeTotalForm workTimeTotalForm) {
+//        //起動コマンド
+//        //curl -X POST -H 'Content-Type:application/json' -d '{"yearMonth":"201802"}' http://localhost:8080/api/kintai/test --noproxy localhost
+//        long start = System.currentTimeMillis();
+//        log.debug(">>>>>>>>> test2 >>>>>>>>>> ");
+//
 //        TotalWorkTimeYearAndMonth totalWorkTimeYearAndMonth =
 //                workTimeService.workTimeTotal(workTimeTotalForm.getValueObject());
-        return null;
-
-    }
+//
+//        TotalWorkTimeYearAndMonth totalWorkTimeYearAndMonth2 =
+//                workTimeService.workTimeTotal2(workTimeTotalForm.getValueObject());
+//
+//        long end = System.currentTimeMillis();
+//        List<TotalWorkTimeYearAndMonth> totalWorkTimeYearAndMonthList = new ArrayList<TotalWorkTimeYearAndMonth>();
+//        totalWorkTimeYearAndMonthList.add(totalWorkTimeYearAndMonth);
+//        totalWorkTimeYearAndMonthList.add(totalWorkTimeYearAndMonth2);
+//        Integer sum = totalWorkTimeYearAndMonthList.stream().mapToInt(
+//                s -> s.getTotalNormalWorkTimeYearAndMonth().getValue()
+//        ).sum();
+//
+//        log.debug("sum : " + sum + " time : " + (end - start) + "ms");
+//
+//
+////        TotalWorkTimeYearAndMonth totalWorkTimeYearAndMonth =
+////                workTimeService.workTimeTotal(workTimeTotalForm.getValueObject());
+//        return null;
+//
+//    }
 }
